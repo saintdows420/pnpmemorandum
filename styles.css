@@ -1,0 +1,200 @@
+/* ===== Application UI (kept visually consistent with the original design) ===== */
+:root{--bg:#f3f4f6;--panel:#fff;--ink:#111827;--mute:#6b7280;--line-c:#d1d5db;--accent:#1e3a8a;--ok:#166534;--bad:#b91c1c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1115;--panel:#1a1d24;--ink:#e5e7eb;--mute:#9ca3af;--line-c:#343a46;--accent:#3b5bdb;--ok:#4ade80;--bad:#f87171}}
+:root[data-theme="dark"]{--bg:#0f1115;--panel:#1a1d24;--ink:#e5e7eb;--mute:#9ca3af;--line-c:#343a46;--accent:#3b5bdb;--ok:#4ade80;--bad:#f87171}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header.bar{flex-wrap:wrap;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 20px;background:var(--accent);color:#fff}
+header.bar h1{font-size:16px;margin:0}
+.hbtns{display:flex;gap:6px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:6px;border:0;background:#fff;color:#1e3a8a;font-weight:600;padding:7px 12px}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.hb{background:transparent;color:#fff;border:1px solid #fff}
+.status{font-size:12px;opacity:.95}
+.wrap{display:grid;grid-template-columns:minmax(300px,390px) 1fr;gap:16px;padding:16px;max-width:1350px;margin:auto}
+@media (max-width:900px){.wrap{grid-template-columns:1fr}}
+.form{background:var(--panel);border:1px solid var(--line-c);border-radius:10px;padding:14px;align-self:start}
+label{display:block;font-size:12px;color:var(--mute);margin:10px 0 3px}
+.form>label:first-child{margin-top:0}
+input,textarea,select{width:100%;font:inherit;padding:7px 9px;border:1px solid var(--line-c);border-radius:6px;background:var(--bg);color:var(--ink)}
+textarea{min-height:110px;resize:vertical}
+details{margin-top:14px;font-size:13px;color:var(--mute)}
+details summary{cursor:pointer}
+.preview{overflow-x:auto}
+button.sec{background:var(--accent);color:#fff;padding:6px 10px;font-size:13px}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-c);padding:3px 8px;font-size:12px;font-weight:500}
+button.danger{color:var(--bad)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid2>div>label:first-child{margin-top:0}
+.bsec{margin-top:10px}.bsec:first-child{margin-top:0}
+.bsec label{margin-top:0}
+.secbar{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center}
+.secbar select{flex:1;min-width:150px;width:auto;padding:6px 8px;font-size:13px}
+.msg{font-size:12px;color:var(--mute);min-height:1.2em;margin-top:6px}
+.msg.err{color:var(--bad)}.msg.ok{color:var(--ok)}
+
+/* editing surface */
+.bodyEd{min-height:140px;border:1px solid var(--line-c);border-radius:6px;padding:8px;background:var(--bg);color:var(--ink);font:11pt/1.3 Arial,Helvetica,sans-serif;overflow:auto;white-space:pre-wrap;outline:none}
+/* lists: marker sits on the left edge of the text, wrapped lines hang .35in in */
+.body ul,.body ol,.bodyEd ul,.bodyEd ol{margin:0;padding:0;list-style:none;counter-reset:li}
+.body li,.bodyEd li{position:relative;padding-left:.35in;counter-increment:li}
+.body li::before,.bodyEd li::before{position:absolute;left:0;content:counter(li,decimal) '.'}
+.body ul>li::before,.bodyEd ul>li::before{content:'\2022'}
+.body ol[type=a]>li::before,.bodyEd ol[type=a]>li::before{content:counter(li,lower-alpha) '.'}
+.body ol[type=A]>li::before,.bodyEd ol[type=A]>li::before{content:counter(li,upper-alpha) '.'}
+.body ol[type=i]>li::before,.bodyEd ol[type=i]>li::before{content:counter(li,lower-roman) '.'}
+.body [data-ind],.bodyEd [data-ind]{margin-left:.5in}
+.body [data-ind="2"],.bodyEd [data-ind="2"]{margin-left:1.0in}
+.body [data-ind="3"],.bodyEd [data-ind="3"]{margin-left:1.5in}
+.body [data-ind="4"],.bodyEd [data-ind="4"]{margin-left:2.0in}
+.body [data-ind="5"],.bodyEd [data-ind="5"]{margin-left:2.5in}
+.body [data-ind="6"],.bodyEd [data-ind="6"]{margin-left:3.0in}
+.body ol[type=I]>li::before,.bodyEd ol[type=I]>li::before{content:counter(li,upper-roman) '.'}
+.bodyEd:focus{border-color:var(--accent)}
+.bodyEd table{border-collapse:collapse;width:100%;table-layout:fixed;margin:2px 0}
+.bodyEd td,.bodyEd th{border:1px solid #888;padding:3px 5px;vertical-align:top;overflow-wrap:anywhere}
+.bodyEd img{cursor:pointer;border-radius:2px}
+.bodyEd img.sel{outline:3px solid var(--accent);outline-offset:1px}
+.bodyEd img[data-x],.bodyEd img[data-y]{left:0!important;top:0!important}   /* offsets show only on the page preview */
+.pages .clip img{cursor:grab;touch-action:none}
+.pages .clip img.drag{cursor:grabbing;outline:2px dashed var(--accent)}
+
+/* ribbon */
+.ribbon{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line-c)}
+.rtabs{display:flex;gap:2px;padding:6px 12px 0;background:var(--bg);overflow-x:auto}
+.rt{background:transparent;color:var(--mute);border:0;border-bottom:3px solid transparent;border-radius:0;padding:6px 14px;font-weight:600;white-space:nowrap}
+.rt.on{color:var(--accent);border-bottom-color:var(--accent);background:var(--panel)}
+.rpanel{display:flex;flex-wrap:wrap;padding:6px 12px 4px;align-items:stretch}
+.rpanel[hidden]{display:none}
+.grp{padding:0 12px;border-right:1px solid var(--line-c);display:flex;flex-direction:column;justify-content:space-between}
+.grp:first-child{padding-left:0}.grp:last-child{border-right:0}
+.gi{display:flex;gap:5px;align-items:center;flex-wrap:wrap;min-height:34px}
+.gl{font-size:11px;color:var(--mute);text-align:center;padding-top:2px}
+.rl{font-size:12px;color:var(--mute);margin:0}
+.ribbon select,.ribbon .rb{padding:5px 8px;font-size:13px;border:1px solid var(--line-c);background:var(--bg);color:var(--ink);border-radius:6px;font-weight:600;width:auto}
+.ribbon input[type=number]{width:62px;padding:5px 6px}
+.ribbon input[type=range]{width:130px;padding:0;border:0;background:transparent}
+.ribbon input[type=color]{width:34px;height:30px;padding:1px;border:1px solid var(--line-c);border-radius:6px;background:var(--bg)}
+.rb.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.picoff{opacity:.45;pointer-events:none}
+
+/* saved memos */
+#dbBox{margin-top:16px;border-top:1px solid var(--line-c);padding-top:12px}
+#dbBox .bar{display:flex;gap:6px;flex-wrap:wrap}
+.item{border:1px solid var(--line-c);border-radius:8px;padding:8px;margin-top:8px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.item.cur{border-color:var(--accent)}
+.item .tt{font-weight:600;font-size:13px;overflow-wrap:anywhere}
+.item .sb{font-size:12px;color:var(--mute);overflow-wrap:anywhere}
+.item .ac{display:flex;gap:4px;flex:none}
+.pill{display:inline-block;font-size:10px;border:1px solid var(--line-c);border-radius:99px;padding:0 6px;margin-left:4px;vertical-align:middle;color:var(--mute)}
+
+/* AI help dialog */
+dialog#aiDlg,dialog#a2hsDlg{border:1px solid var(--line-c);border-radius:12px;max-width:540px;width:92vw;background:var(--panel);color:var(--ink);padding:18px}
+dialog#aiDlg::backdrop{background:rgba(15,17,21,.6)}
+dialog h2{margin:0 0 6px;font-size:17px}dialog ol{padding-left:20px;margin:8px 0}dialog li{margin:6px 0}dialog#a2hsDlg::backdrop{background:rgba(15,17,21,.6)}dialog#a2hsDlg .warn{color:var(--bad)}#aiDlg select{width:auto;max-width:100%}
+#aiDlg .warn{color:var(--bad)}.dlgbtns{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+/* toast + login */
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#111827;color:#fff;padding:9px 14px;border-radius:8px;font-size:13px;max-width:92vw;z-index:30;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.toast[hidden]{display:none}
+#loginBox{position:fixed;inset:0;background:rgba(15,17,21,.65);display:flex;align-items:center;justify-content:center;z-index:40;padding:16px}
+#loginBox[hidden]{display:none}
+#loginBox form{background:var(--panel);padding:20px;border-radius:12px;width:min(360px,100%)}
+#loginBox h2{margin:0 0 4px;font-size:17px}
+
+@media (max-width:600px){
+  .rpanel{overflow-x:auto;flex-wrap:nowrap}
+  .grp{flex:none}
+  .wrap{padding:10px;gap:12px}
+  header.bar{padding:10px 12px}
+  input,textarea,select{font-size:16px}
+  button{padding:10px 14px}
+  
+}
+
+.ribbon .rb.danger{color:var(--bad)}
+
+
+/* ===== Memorandum page styles ===== */
+
+/* ===== The memorandum itself. Shared by the live preview, browser print, and server PDF. =====
+   One layout engine (the browser's) is used for every output, so what you see is what prints.
+   Geometry is driven by CSS variables set per paper size (see js/doc.js). */
+.sheet{
+  --pw:210mm;--ph:297mm;           /* paper size (overridden per document) */
+  --line:13.5pt;                    /* one body line: all vertical spacing is a multiple of this */
+  --mx:1in;                         /* left/right page margin */
+  --indent:.5in;                    /* label indent (FOR / FROM / SUBJECT / DATE) */
+  --fh:2.4in;                       /* footer height on every page */
+  width:var(--pw);margin:0 auto;color:#000;font:11pt/var(--line) Arial,Helvetica,sans-serif;
+}
+.sheet.meas{position:absolute;left:-99999px;top:0;visibility:hidden;pointer-events:none;zoom:1!important}
+/* One .pg per printed page: letterhead, a window onto the continuous text, footer. Text is cut only between lines. */
+.pg{box-sizing:border-box;width:var(--pw);height:calc(var(--ph) - 1px);margin:0 auto 14px;display:flex;flex-direction:column;background:#fff;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.25)}
+.hdw{flex:none;padding:.3in var(--mx) 0}
+.win{flex:1;min-height:0;padding:.1in var(--mx) 0;overflow:hidden}
+.clip{position:relative;overflow:hidden}
+.flow{width:calc(var(--pw) - 2*var(--mx))}
+.pg .flow{position:absolute;left:0;width:100%}
+.ftw{flex:none;height:var(--fh);padding:0 var(--mx) .4in;display:flex;flex-direction:column;justify-content:flex-end}
+
+/* header */
+.hd{text-align:center;font-size:12pt;line-height:14.5pt}
+.hd p{margin:0}
+.hd .bold{font-weight:bold}
+/* logos sit in their own columns, so the text can never run under them at any paper size */
+.hdrow{display:grid;grid-template-columns:.84in 1fr 1.015in;column-gap:.15in;align-items:start;margin:.17in -.55in 0}
+.hdrow img{height:auto;display:block}
+.hdrow img.l{width:.84in;height:1.191in}
+.hdrow img.r{width:1.015in;height:1.259in}
+.hdrow .hdtxt{padding-top:.08in}
+.cls{font-weight:bold;color:#0000ff}
+/* footer */
+.ft{text-align:center}
+.ft .seal{width:1.15in;height:1.082in;display:block;margin:0 auto .06in}
+.ft .tag{text-align:center;font-style:italic;margin-bottom:2px}
+.ft .adv{font-size:8pt;line-height:9.5pt;text-align:left;margin-bottom:6px}
+
+/* memorandum block */
+.t{font-weight:bold;margin:0 0 var(--line)}
+.row{display:flex;margin:0 0 var(--line) var(--indent);break-inside:avoid}
+.row .k{width:.85in;flex:none}
+.row .v{flex:1;white-space:pre-wrap;overflow-wrap:anywhere}
+.row .v .b{font-weight:bold}
+.attn{padding-left:.55em}
+.rule{border-top:1.5px solid #000;margin:0 0 var(--line)}
+
+/* body */
+/* body text, wrapped lines and list markers all start under the T of "DATE" */
+.body{margin-left:calc(var(--indent) + 15.3pt);white-space:pre-wrap;overflow-wrap:anywhere;orphans:2;widows:2}
+.body table{border-collapse:collapse;width:100%;table-layout:fixed;margin:2px 0}
+.body tr{break-inside:avoid}
+.body td,.body th{border:1px solid #000;padding:3px 5px;vertical-align:top;overflow-wrap:anywhere}
+.body img,.bodyEd img{display:block;height:auto;max-width:100%;margin:6px auto;break-inside:avoid}
+.body img[data-align=left],.bodyEd img[data-align=left]{margin-left:0;margin-right:auto}
+.body img[data-align=right],.bodyEd img[data-align=right]{margin-left:auto;margin-right:0}
+
+/* signatory: four blank lines after the last body line, kept together and with the text before it */
+.keep{break-inside:avoid}
+.sigblock{display:block;width:max-content;max-width:100%;margin:calc(var(--line)*4) 0 0 auto;text-align:left;break-inside:avoid;break-before:avoid;white-space:pre-wrap;overflow-wrap:anywhere}
+.sigblock b{display:block}
+.sigblock[hidden]{display:none}
+
+/* touch devices: bigger tap targets, no double-tap zoom delay, smooth side-scrolling toolbars */
+@media (pointer:coarse){button,select,input:not([type=color]):not([type=range]){min-height:40px}.rb{min-width:38px;min-height:38px}}
+button,select,.rb{touch-action:manipulation}
+body{-webkit-text-size-adjust:100%;overscroll-behavior-y:contain}
+.rpanel,.rtabs{-webkit-overflow-scrolling:touch}
+header.bar .hbtns{flex-wrap:wrap;gap:6px}
+dialog{max-height:90vh;overflow:auto}
+@media print{
+  @page{margin:0}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  header.bar,.form,.ribbon,.toast,#loginBox,.noprint,.meas{display:none!important}
+  .wrap{display:block!important;padding:0!important;max-width:none!important;margin:0!important}
+  .preview{overflow:visible!important;padding:0!important}
+  .sheet{zoom:1!important;margin:0!important}
+  .pg{box-shadow:none!important;margin:0!important;break-after:page;break-inside:avoid}
+  .pg:last-child{break-after:auto}
+}
